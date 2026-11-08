@@ -1,0 +1,196 @@
+:host {
+  display: block;
+}
+
+.contenedor {
+  width: min(1120px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 32px 0 56px;
+}
+
+header, .titulo-lista, .sesion {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+header {
+  margin-bottom: 24px;
+}
+
+h1, h2, p {
+  margin-top: 0;
+}
+
+h1 {
+  margin-bottom: 0;
+  font-size: clamp(1.7rem, 4vw, 2.4rem);
+}
+
+h2 {
+  font-size: 1.2rem;
+}
+
+.etiqueta {
+  margin-bottom: 6px;
+  color: #176b58;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.tarjeta {
+  margin: 18px 0;
+  padding: 22px;
+  border: 1px solid #dfe8e4;
+  border-radius: 12px;
+  background: white;
+  box-shadow: 0 5px 20px #17372b0a;
+}
+
+.acceso {
+  max-width: 440px;
+}
+
+form, label {
+  display: grid;
+  gap: 8px;
+}
+
+form {
+  gap: 15px;
+}
+
+label {
+  color: #31443e;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+input, select, button {
+  min-height: 40px;
+  border: 1px solid #cbd9d3;
+  border-radius: 7px;
+  font: inherit;
+}
+
+input, select {
+  width: 100%;
+  padding: 8px 10px;
+  color: #1d2c26;
+  background: #fff;
+}
+
+button {
+  padding: 8px 14px;
+  color: white;
+  background: #176b58;
+  border-color: #176b58;
+  cursor: pointer;
+  font-weight: 650;
+}
+
+button:hover {
+  background: #105341;
+}
+
+button.secundario {
+  color: #176b58;
+  background: white;
+}
+
+button.peligro {
+  border-color: #ad3e36;
+  background: #ad3e36;
+}
+
+.formulario-cita {
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  align-items: end;
+}
+
+.busqueda {
+  grid-template-columns: minmax(180px, 1fr) auto;
+  align-items: end;
+  max-width: 620px;
+}
+
+.titulo-lista {
+  margin-bottom: 12px;
+}
+
+.titulo-lista h2 {
+  margin-bottom: 0;
+}
+
+.tabla-contenedor {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+th, td {
+  padding: 11px 9px;
+  border-bottom: 1px solid #e6ece9;
+  white-space: nowrap;
+}
+
+th {
+  color: #52645d;
+  font-size: 0.82rem;
+}
+
+.acciones {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.acciones input {
+  width: 190px;
+}
+
+.lista-manana {
+  padding-left: 20px;
+  line-height: 1.9;
+}
+
+.mensaje {
+  padding: 12px 15px;
+  border-radius: 8px;
+  color: #155444;
+  background: #e4f4ed;
+}
+
+.ayuda {
+  margin: 15px 0 0;
+  color: #66756f;
+  font-size: 0.88rem;
+}
+
+@media (max-width: 620px) {
+  .contenedor {
+    width: min(100% - 20px, 1120px);
+    padding-top: 20px;
+  }
+
+  .tarjeta {
+    padding: 16px;
+  }
+
+  header, .titulo-lista {
+    align-items: flex-start;
+  }
+
+  .sesion {
+    align-items: flex-end;
+    flex-direction: column;
+    font-size: 0.85rem;
+  }
+}

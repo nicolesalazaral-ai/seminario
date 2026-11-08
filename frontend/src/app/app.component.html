@@ -1,0 +1,132 @@
+<main class="contenedor">
+  <header>
+    <div>
+      <p class="etiqueta">Consultorio médico</p>
+      <h1>Agenda de citas</h1>
+    </div>
+    @if (usuario) {
+      <div class="sesion">
+        <span>{{ usuario.usuario }} · {{ usuario.rol }}</span>
+        <button class="secundario" type="button" (click)="cerrarSesion()">Salir</button>
+      </div>
+    }
+  </header>
+
+  @if (mensaje) {
+    <p class="mensaje" role="status">{{ mensaje }}</p>
+  }
+
+  @if (!usuario) {
+    <section class="tarjeta acceso">
+      <h2>Iniciar sesión</h2>
+      <form (ngSubmit)="iniciarSesion()">
+        <label>Usuario
+          <input name="usuario" [(ngModel)]="acceso.usuario" required autocomplete="username">
+        </label>
+        <label>Contraseña
+          <input name="contrasena" [(ngModel)]="acceso.contrasena" required type="password" autocomplete="current-password">
+        </label>
+        <button type="submit">Entrar</button>
+      </form>
+      <p class="ayuda">Usuarios locales: marcela, laura, daniel o patricia. La contraseña se define al cargar los datos de prueba.</p>
+    </section>
+  } @else {
+    @if (esPersonal) {
+      <section class="tarjeta">
+        <h2>Agendar una cita</h2>
+        <form class="formulario-cita" (ngSubmit)="agendar()">
+          <label>Nombre del paciente
+            <input name="nombre" [(ngModel)]="nuevaCita.nombre" required>
+          </label>
+          <label>Celular
+            <input name="celular" [(ngModel)]="nuevaCita.celular" required type="tel">
+          </label>
+          <label>Médico
+            <select name="medico" [(ngModel)]="nuevaCita.medico_id">
+              <option [ngValue]="1">Dr. Daniel</option>
+              <option [ngValue]="2">Dra. Patricia</option>
+            </select>
+          </label>
+          <label>Fecha y hora
+            <input name="fechaHora" [(ngModel)]="nuevaCita.fecha_hora_inicio" required type="datetime-local">
+          </label>
+          <label>Motivo
+            <select name="motivo" [(ngModel)]="nuevaCita.motivo">
+              <option value="primera_vez">Primera vez (30 min)</option>
+              <option value="control">Control (20 min)</option>
+              <option value="urgencia">Urgencia (20 min)</option>
+            </select>
+          </label>
+          <button type="submit">Agendar cita</button>
+        </form>
+      </section>
+
+      <section class="tarjeta">
+        <h2>Buscar paciente y faltas</h2>
+        <form class="busqueda" (ngSubmit)="buscarPorNombre()">
+          <label>Nombre
+            <input name="busquedaNombre" [(ngModel)]="busquedaNombre" required>
+          </label>
+          <button type="submit">Buscar</button>
+        </form>
+        @if (resultadoPaciente) {
+          <p>{{ resultadoPaciente.nombre }} · {{ resultadoPaciente.celular }} · Faltas: {{ resultadoPaciente.faltas }}</p>
+        }
+      </section>
+    }
+
+    <section class="tarjeta">
+      <div class="titulo-lista">
+        <h2>{{ esPersonal ? 'Citas del día' : 'Mi agenda' }}</h2>
+        <label>Fecha
+          <input type="date" name="fechaAgenda" [(ngModel)]="fecha" (change)="cambiarFecha()">
+        </label>
+      </div>
+      @if (citas.length === 0) {
+        <p>No hay citas para esta fecha.</p>
+      } @else {
+        <div class="tabla-contenedor">
+          <table>
+            <thead>
+              <tr><th>Hora</th><th>Paciente</th><th>Médico</th><th>Celular</th><th>Estado</th><th>Acciones</th></tr>
+            </thead>
+            <tbody>
+              @for (cita of citas; track cita.id) {
+                <tr>
+                  <td>{{ mostrarHora(cita.fecha_hora_inicio) }}</td>
+                  <td>{{ cita.paciente }}</td>
+                  <td>{{ cita.medico }}</td>
+                  <td>{{ cita.celular }}</td>
+                  <td>{{ cita.estado }}</td>
+                  <td class="acciones">
+                    @if (esPersonal) {
+                      <input aria-label="Nueva fecha y hora" type="datetime-local" [(ngModel)]="cambiosHora[cita.id]" [name]="'hora' + cita.id">
+                      <button type="button" class="secundario" (click)="mover(cita)">Mover</button>
+                      <button type="button" class="peligro" (click)="cambiarEstado(cita, 'cancelada')">Cancelar</button>
+                    } @else {
+                      <button type="button" (click)="cambiarEstado(cita, 'atendida')">Atendida</button>
+                      <button type="button" class="secundario" (click)="cambiarEstado(cita, 'no_llego')">No llegó</button>
+                    }
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </section>
+
+    <section class="tarjeta">
+      <h2>{{ esPersonal ? 'Citas para mañana' : 'Mis citas para mañana' }}</h2>
+      @if (citasManana.length === 0) {
+        <p>No hay citas para mañana</p>
+      } @else {
+        <ul class="lista-manana">
+          @for (cita of citasManana; track cita.id) {
+            <li><strong>{{ mostrarHora(cita.fecha_hora_inicio) }}</strong> · {{ cita.paciente }} · {{ cita.medico }} · {{ cita.celular }}</li>
+          }
+        </ul>
+      }
+    </section>
+  }
+</main>

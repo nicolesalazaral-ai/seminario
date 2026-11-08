@@ -1,0 +1,16 @@
+{
+  "name": "agenda-consultorio-backend",
+  "version": "1.0.0",
+  "description": "API local para agendar citas médicas",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "seed": "node src/seed.js",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "better-sqlite3": "^13.0.3",
+    "express": "^5.1.0"
+  }
+}
