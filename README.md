@@ -100,5 +100,5 @@ Se usó GitHub Copilot para apoyar implementación, pruebas y revisión de segur
 
 ## Autor y licencia
 
-Autora: Nicole Salazar  
+Autora: Nicole Salazar
 Licencia: [elegir licencia]
