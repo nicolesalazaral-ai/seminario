@@ -6,6 +6,7 @@ const citasService = require('./citasService');
 
 const app = express();
 const tokens = new Map();
+const host = '127.0.0.1';
 const puerto = process.env.PORT || 3000;
 const estadosValidos = new Set(['pendiente', 'atendida', 'cancelada', 'no_llego']);
 
@@ -170,6 +171,17 @@ app.use((error, req, res, next) => {
   res.status(500).json({ mensaje: 'Error interno del servidor' });
 });
 
-app.listen(puerto, '0.0.0.0', () => {
-  console.log(`API lista en http://localhost:${puerto}`);
-});
+function iniciarServidor(puertoServidor = puerto) {
+  const servidor = app.listen(puertoServidor, host, () => {
+    const direccion = servidor.address();
+    const puertoEscuchando = typeof direccion === 'object' && direccion
+      ? direccion.port
+      : puertoServidor;
+    console.log(`API lista en http://localhost:${puertoEscuchando}`);
+  });
+  return servidor;
+}
+
+if (require.main === module) iniciarServidor();
+
+module.exports = { iniciarServidor };
