@@ -1,9 +1,47 @@
 const bcrypt = require('bcryptjs');
 const db = require('./db');
 
-const contrasena = process.env.SEED_PASSWORD;
-if (!contrasena) {
-  throw new Error('Define SEED_PASSWORD antes de cargar los datos de prueba.');
+const usuariosSemilla = [
+  {
+    nombreUsuario: 'marcela',
+    variable: 'SEED_PASSWORD_MARCELA',
+    contrasena: process.env.SEED_PASSWORD_MARCELA,
+    rol: 'recepcionista',
+    medicoId: null,
+  },
+  {
+    nombreUsuario: 'laura',
+    variable: 'SEED_PASSWORD_LAURA',
+    contrasena: process.env.SEED_PASSWORD_LAURA,
+    rol: 'auxiliar',
+    medicoId: null,
+  },
+  {
+    nombreUsuario: 'daniel',
+    variable: 'SEED_PASSWORD_DANIEL',
+    contrasena: process.env.SEED_PASSWORD_DANIEL,
+    rol: 'medico',
+    medicoId: 1,
+  },
+  {
+    nombreUsuario: 'patricia',
+    variable: 'SEED_PASSWORD_PATRICIA',
+    contrasena: process.env.SEED_PASSWORD_PATRICIA,
+    rol: 'medico',
+    medicoId: 2,
+  },
+];
+const contrasenas = usuariosSemilla.map(({ contrasena }) => contrasena);
+if (contrasenas.some((contrasena) => !contrasena)) {
+  throw new Error(`Define estas variables antes de cargar los datos: ${usuariosSemilla.map(({ variable }) => variable).join(', ')}.`);
+}
+if (contrasenas.some((contrasena) => Buffer.byteLength(contrasena, 'utf8') > 72)) {
+  throw new Error('Las contraseñas de seed no pueden superar 72 bytes (límite de bcrypt).');
+}
+const huellasContrasena = contrasenas.map((contrasena) =>
+  Buffer.from(contrasena, 'utf8').subarray(0, 72).toString('hex'));
+if (new Set(huellasContrasena).size !== huellasContrasena.length) {
+  throw new Error('Cada usuario de seed debe tener una contraseña diferente.');
 }
 
 const insertarDatos = db.transaction(() => {
@@ -24,16 +62,14 @@ const insertarDatos = db.transaction(() => {
     }
   }
 
-  const contrasenaHash = bcrypt.hashSync(contrasena, 10);
   const usuario = db.prepare(`
     INSERT OR IGNORE INTO usuario (nombre_usuario, contrasena_hash, rol, medico_id)
     VALUES (?, ?, ?, ?)
     ON CONFLICT(nombre_usuario) DO UPDATE SET contrasena_hash = excluded.contrasena_hash
   `);
-  usuario.run('marcela', contrasenaHash, 'recepcionista', null);
-  usuario.run('laura', contrasenaHash, 'auxiliar', null);
-  usuario.run('daniel', contrasenaHash, 'medico', 1);
-  usuario.run('patricia', contrasenaHash, 'medico', 2);
+  for (const { nombreUsuario, contrasena, rol, medicoId } of usuariosSemilla) {
+    usuario.run(nombreUsuario, bcrypt.hashSync(contrasena, 10), rol, medicoId);
+  }
 
   const paciente = db.prepare('INSERT OR IGNORE INTO paciente (id, nombre, celular) VALUES (?, ?, ?)');
   for (let numero = 1; numero <= 5; numero += 1) {

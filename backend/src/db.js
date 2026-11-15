@@ -2,10 +2,14 @@ const fs = require('node:fs');
 const path = require('node:path');
 const Database = require('better-sqlite3');
 
-const carpetaDatos = path.join(__dirname, '..', 'data');
-fs.mkdirSync(carpetaDatos, { recursive: true });
+const archivoDb = process.env.DB_PATH
+  ? path.resolve(process.env.DB_PATH)
+  : path.join(__dirname, '..', 'data', 'agenda.sqlite3');
+// DB_PATH is trusted local operator configuration, not request data.
+// eslint-disable-next-line security/detect-non-literal-fs-filename
+fs.mkdirSync(path.dirname(archivoDb), { recursive: true });
 
-const db = new Database(path.join(carpetaDatos, 'agenda.sqlite3'));
+const db = new Database(archivoDb);
 db.pragma('foreign_keys = ON');
 db.pragma('journal_mode = WAL');
 
