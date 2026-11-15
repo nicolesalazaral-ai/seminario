@@ -9,6 +9,11 @@ class ErrorDeSolicitud extends Error {
   }
 }
 
+/**
+ * Comprueba que una fecha use AAAA-MM-DD y exista en el calendario.
+ * @param {unknown} fecha Fecha recibida.
+ * @returns {boolean} Si la fecha es válida.
+ */
 function fechaValida(fecha) {
   if (typeof fecha !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(fecha)) return false;
   const [anio, mes, dia] = fecha.split('-').map(Number);
@@ -18,6 +23,11 @@ function fechaValida(fecha) {
     && valor.getUTCDate() === dia;
 }
 
+/**
+ * Comprueba que una fecha y hora use AAAA-MM-DDTHH:mm y sea válida.
+ * @param {unknown} valor Fecha y hora recibida.
+ * @returns {boolean} Si la fecha y hora son válidas.
+ */
 function fechaHoraValida(valor) {
   if (typeof valor !== 'string') return false;
   const coincidencia = /^(\d{4}-\d{2}-\d{2})T(\d{2}):(\d{2})$/.exec(valor);
@@ -27,6 +37,11 @@ function fechaHoraValida(valor) {
   return hora <= 23 && minuto <= 59;
 }
 
+/**
+ * Valida los campos obligatorios y el motivo de una cita.
+ * @param {object} datos Datos de la cita.
+ * @throws {ErrorDeSolicitud} Con estado 400 si los datos no son válidos.
+ */
 function validarDatosCita({ paciente_id, medico_id, fecha_hora_inicio, motivo }) {
   if (paciente_id === undefined || paciente_id === null || String(paciente_id).trim() === ''
     || medico_id === undefined || medico_id === null || String(medico_id).trim() === ''
@@ -38,6 +53,13 @@ function validarDatosCita({ paciente_id, medico_id, fecha_hora_inicio, motivo })
   }
 }
 
+/**
+ * Comprueba que el médico atienda durante todo el intervalo solicitado.
+ * @param {number} medicoId Identificador del médico.
+ * @param {string} fechaHora Fecha y hora local de inicio.
+ * @param {number} duracion Duración de la cita en minutos.
+ * @throws {ErrorDeSolicitud} Con estado 422 si no hay horario disponible.
+ */
 function validarHorario(medicoId, fechaHora, duracion) {
   const fecha = fechaHora.slice(0, 10);
   const dia = new Date(`${fecha}T00:00:00`).getDay();
@@ -59,6 +81,15 @@ function validarHorario(medicoId, fechaHora, duracion) {
   }
 }
 
+/**
+ * Busca solapamientos con citas activas del mismo médico.
+ * @param {number} medicoId Identificador del médico.
+ * @param {string} fechaHora Fecha y hora de inicio en formato ISO local.
+ * @param {number} duracion Duración solicitada en minutos.
+ * @param {number|null} [citaId=null] Cita que se excluye al reprogramar.
+ * @returns {undefined} No devuelve valor si el intervalo está libre.
+ * @throws {ErrorDeSolicitud} Con estado 409 si existe un solapamiento.
+ */
 function validarDisponibilidad(medicoId, fechaHora, duracion, citaId = null) {
   const inicio = new Date(fechaHora).getTime();
   const fin = inicio + duracion * 60000;
@@ -82,6 +113,12 @@ function validarDisponibilidad(medicoId, fechaHora, duracion, citaId = null) {
   }
 }
 
+/**
+ * Valida e inserta una cita nueva.
+ * @param {object} datos Campos paciente_id, medico_id, fecha_hora_inicio y motivo.
+ * @returns {object} Fila insertada de la tabla cita.
+ * @throws {ErrorDeSolicitud} Con estado 400, 404, 409 o 422 según la validación.
+ */
 function crearCita(datos) {
   validarDatosCita(datos);
   const pacienteId = Number(datos.paciente_id);
@@ -102,6 +139,13 @@ function crearCita(datos) {
   return db.prepare('SELECT * FROM cita WHERE id = ?').get(resultado.lastInsertRowid);
 }
 
+/**
+ * Reprograma una cita existente y no cancelada.
+ * @param {number} id Identificador de la cita.
+ * @param {string} fechaHora Nuevo inicio en formato AAAA-MM-DDTHH:mm.
+ * @returns {object} Fila actualizada de la tabla cita.
+ * @throws {ErrorDeSolicitud} Con estado 400, 404, 409 o 422 según la validación.
+ */
 function moverCita(id, fechaHora) {
   if (!fechaHoraValida(fechaHora)) {
     throw new ErrorDeSolicitud(400, 'Fecha y hora inválidas');

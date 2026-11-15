@@ -69,6 +69,13 @@ function listaCitas(fecha, medicoId = null) {
   `).all(...parametros);
 }
 
+/**
+ * Inicia sesión y entrega un token temporal en memoria.
+ * @route POST /sesiones
+ * @param {import('express').Request} req Body JSON con usuario y contrasena.
+ * @param {import('express').Response} res Respuesta HTTP.
+ * @returns {void} 201 con token y usuario; 400 si faltan datos; 401 si no coinciden; 500 ante error interno.
+ */
 app.post('/sesiones', conManejoDeErrores((req, res) => {
   const { usuario, contrasena } = req.body || {};
   if (!usuario || !contrasena) return res.status(400).json({ mensaje: 'Datos incompletos' });
@@ -87,6 +94,13 @@ app.post('/sesiones', conManejoDeErrores((req, res) => {
   res.status(201).json({ token, usuario: datosUsuario });
 }));
 
+/**
+ * Crea un paciente para uso del personal autenticado.
+ * @route POST /pacientes
+ * @param {import('express').Request} req Body JSON con nombre y celular.
+ * @param {import('express').Response} res Respuesta HTTP.
+ * @returns {void} 201 con el paciente; 400 ante campos vacíos; 403 sin token o rol autorizado; 500 ante error interno.
+ */
 app.post('/pacientes', autenticar, exigirPersonal, conManejoDeErrores((req, res) => {
   const { nombre, celular } = req.body || {};
   if (typeof celular !== 'string' || !celular.trim()) {
@@ -100,6 +114,13 @@ app.post('/pacientes', autenticar, exigirPersonal, conManejoDeErrores((req, res)
   res.status(201).json(db.prepare('SELECT * FROM paciente WHERE id = ?').get(resultado.lastInsertRowid));
 }));
 
+/**
+ * Busca un paciente por nombre y cuenta sus faltas.
+ * @route GET /pacientes?nombre=...
+ * @param {import('express').Request} req Query string con nombre.
+ * @param {import('express').Response} res Respuesta HTTP.
+ * @returns {void} 200 con el paciente; 400 sin nombre; 404 si no existe; 403 sin acceso; 500 ante error interno.
+ */
 app.get('/pacientes', autenticar, exigirPersonal, conManejoDeErrores((req, res) => {
   const nombre = typeof req.query.nombre === 'string' ? req.query.nombre.trim() : '';
   if (!nombre) return res.status(400).json({ mensaje: 'El nombre es obligatorio' });
@@ -114,10 +135,24 @@ app.get('/pacientes', autenticar, exigirPersonal, conManejoDeErrores((req, res) 
   res.json(paciente);
 }));
 
+/**
+ * Valida y agenda una cita; solo puede usarla el personal.
+ * @route POST /citas
+ * @param {import('express').Request} req Body con paciente_id, medico_id, fecha_hora_inicio y motivo.
+ * @param {import('express').Response} res Respuesta HTTP.
+ * @returns {void} 201 con la cita; 400, 404, 409 o 422 ante errores de validación; 403 sin acceso; 500 ante error interno.
+ */
 app.post('/citas', autenticar, exigirPersonal, conManejoDeErrores((req, res) => {
   res.status(201).json(citasService.crearCita(req.body || {}));
 }));
 
+/**
+ * Consulta las citas de un médico; un médico solo puede consultar su propia agenda.
+ * @route GET /medicos/:id/citas?fecha=AAAA-MM-DD
+ * @param {import('express').Request} req ID en params y fecha en query.
+ * @param {import('express').Response} res Respuesta HTTP.
+ * @returns {void} 200 con las citas; 400 ante fecha inválida; 403 sin acceso; 404 si no existe el médico; 500 ante error interno.
+ */
 app.get('/medicos/:id/citas', autenticar, conManejoDeErrores((req, res) => {
   const medicoId = Number(req.params.id);
   if (!Number.isInteger(medicoId)) return res.status(404).json({ mensaje: 'No existe ese médico' });
@@ -131,6 +166,13 @@ app.get('/medicos/:id/citas', autenticar, conManejoDeErrores((req, res) => {
   res.json(listaCitas(fecha, medicoId));
 }));
 
+/**
+ * Consulta todas las citas de una fecha para el personal autenticado.
+ * @route GET /citas?fecha=AAAA-MM-DD
+ * @param {import('express').Request} req Fecha en query.
+ * @param {import('express').Response} res Respuesta HTTP.
+ * @returns {void} 200 con las citas; 400 ante fecha inválida; 403 si no es personal; 500 ante error interno.
+ */
 app.get('/citas', autenticar, conManejoDeErrores((req, res) => {
   if (!esPersonal(req.usuario)) return res.status(403).json({ mensaje: 'No tienes permiso' });
   if (!citasService.fechaValida(req.query.fecha)) {
@@ -139,11 +181,25 @@ app.get('/citas', autenticar, conManejoDeErrores((req, res) => {
   res.json(listaCitas(req.query.fecha));
 }));
 
+/**
+ * Mueve una cita; solo puede usarla el personal autenticado.
+ * @route PATCH /citas/:id
+ * @param {import('express').Request} req ID en params y fecha_hora_inicio en body.
+ * @param {import('express').Response} res Respuesta HTTP.
+ * @returns {void} 200 con la cita; 400, 404, 409 o 422 ante errores de validación; 403 sin acceso; 500 ante error interno.
+ */
 app.patch('/citas/:id', autenticar, exigirPersonal, conManejoDeErrores((req, res) => {
   const cita = citasService.moverCita(Number(req.params.id), req.body && req.body.fecha_hora_inicio);
   res.json(cita);
 }));
 
+/**
+ * Cambia el estado de una cita con permisos de personal o del médico asignado.
+ * @route PUT /citas/:id/estado
+ * @param {import('express').Request} req ID en params y estado en body.
+ * @param {import('express').Response} res Respuesta HTTP.
+ * @returns {void} 200 con la cita; 400 ante estado inválido; 403 sin permiso; 404 si no existe; 500 ante error interno.
+ */
 app.put('/citas/:id/estado', autenticar, conManejoDeErrores((req, res) => {
   const cita = citaPorId(Number(req.params.id));
   if (!cita) return res.status(404).json({ mensaje: 'No existe esa cita' });
