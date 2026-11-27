@@ -1,8 +1,8 @@
 # Informe final del proyecto integrador
 
-Proyecto: Agenda del consultorio  
-Estudiante: Nicole Salazar  
-Repositorio: https://github.com/nicolesalazaral-ai/seminario  
+Proyecto: Agenda del consultorio
+Estudiante: Nicole Salazar
+Repositorio: https://github.com/nicolesalazaral-ai/seminario
 Fecha: 2026-11-27
 
 Fecha de elaboración: 2026-11-27. Este documento fue preparado en la Semana 10 con base en una plantilla encontrada fuera del repositorio y en evidencia verificable. No fue entregable original de módulos anteriores.

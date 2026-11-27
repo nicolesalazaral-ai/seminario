@@ -94,7 +94,7 @@ Asistente usado: GitHub Copilot (modo Agent y chat) para el proyecto, las prueba
 - **Archivos creados o modificados:** `docs/estado_verificado.md`, `docs/propuesta.md`, `docs/requisitos.md`, `docs/diseno.md`, `docs/adr/ADR-001.md`, `docs/plan_pruebas.md`, `docs/guia_despliegue.md`, `docs/plan_operacion.md`, `docs/aviso_privacidad_borrador.md`, `docs/informe_final.md`, `.github/workflows/ci.yml`, `README.md` y esta entrada.
 - **Verificación:** Ejecuté `git log --oneline`, `git branch`, `npm test` y `npm run lint` en backend. Las 9 pruebas pasaron y el linter quedó sin errores ni avisos. Confirmé correcciones con `git show` y auditoría frontend con `npm audit`.
 - **Nota:** La revisión final de contenido, licencia, responsabilidad y aviso de privacidad será humana.
-- **Commit relacionado:** Pendiente de completar con el hash de este bloque.
+- **Commits relacionados:** `1840e85` — Prepara documentos finales del integrador; `ec819cb` — Agrega pipeline CI de backend.
 
 ## Resumen
 

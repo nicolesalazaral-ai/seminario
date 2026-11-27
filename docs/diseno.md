@@ -1,6 +1,6 @@
 # Diseño del sistema
 
-Fecha de creación: 2026-11-27  
+Fecha de creación: 2026-11-27
 Documento creado en la Semana 10 para describir la arquitectura real.
 
 ## Componentes

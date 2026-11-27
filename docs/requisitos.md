@@ -1,6 +1,6 @@
 # Requisitos verificables
 
-Fecha de creación: 2026-11-27  
+Fecha de creación: 2026-11-27
 Documento creado en la Semana 10. No se presenta como entregable original de un módulo anterior.
 
 ## Entrevista y prioridades originales
