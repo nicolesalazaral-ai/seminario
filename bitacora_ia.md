@@ -54,24 +54,49 @@ Asistente usado: GitHub Copilot (modo Agent y chat) para el proyecto, las prueba
 
 ### Entrada 6
 
-- **Fecha:** 2026-11-07
-- **Prompt o sugerencia:** [Completa después del refactor: qué le pediste a Copilot o qué hiciste tú, por ejemplo cambiar números fijos como 20 y 30 por constantes con nombre.]
-- **Decisión:** [Aceptada | Aceptada con cambios | Rechazada]
-- **Por qué:** [Razón: qué mejoró en el código.]
-- **Verificación:** [Corrí `npm test` y las 6 pruebas siguieron pasando sin modificarlas.]
-- **Commit relacionado:** []
+- **Fecha:** 2026-11-27
+- **Prompt o sugerencia:** Documenté las funciones principales de `citasService.js`, las rutas de `server.js`, actualicé el README con las ocho secciones solicitadas y agregué `.env.example` sin valores reales.
+- **Decisión:** Aceptada
+- **Por qué:** La documentación quedó alineada con el código real; el README conserva la funcionalidad de la semana 5 y solo usa comandos que existen en el proyecto.
+- **Verificación:** Revisé las firmas y respuestas contra el código, ejecuté `npm test` y `npm run lint`, y ambos quedaron en verde.
+- **Commit relacionado:** `9dac0f9f1f4c77689411ad1624bf224e0e635ab2`.
+
+### Entrada 7
+
+- **Fecha:** 2026-11-27
+- **Prompt o sugerencia:** Configuré ESLint en `backend/` con reglas recomendadas y `eslint-plugin-security`, agregué el script `lint`, ejecuté el linter y no corregí código de seguridad sin confirmación.
+- **Decisión:** Aceptada
+- **Por qué:** `backend/eslint.config.js` aporta reglas JavaScript y de seguridad sin alterar el comportamiento existente, y el script permite repetir la revisión.
+- **Verificación:** Ejecuté `npm --prefix backend run lint`; terminó sin errores ni avisos. Commit relacionado: `7ab373e963134f9972330923ceeb88e2a0d043b8`.
+
+### Entrada 8
+
+- **Fecha:** 2026-11-27
+- **Prompt o sugerencia:** Corregí las contraseñas compartidas del seed y el binding público de la API. Luego agregué pruebas de cuentas con contraseñas distintas y de escucha exclusiva en loopback.
+- **Decisión:** Aceptada con cambios
+- **Por qué:** Las correcciones separan credenciales por cuenta y evitan que el servidor sea alcanzable desde otros equipos. Además, las variables se mantienen fuera del código y los hallazgos tienen pruebas reproducibles.
+- **Verificación:** Las 9 pruebas de backend pasaron y `npm run lint` quedó limpio. Commits relacionados: `bbdf24adfc3727a5e424a5a9626d9f5ad0ce5097` y `f3b8bd6d4f1459330de65adce488ea3788cb5684`.
+
+### Entrada 9
+
+- **Fecha:** 2026-11-27
+- **Prompt o sugerencia:** Creé el informe con la plantilla adjunta y completé la bitácora con hechos verificables sobre herramientas, commits, hallazgos y pendientes.
+- **Decisión:** Aceptada
+- **Por qué:** La documentación conserva la semana 5, registra los cambios reales y separa hallazgos corregidos de pendientes no autorizados.
+- **Verificación:** Confirmé commits con `git log`, ejecución de tests y lint, `.env.example` sin valores reales y el estado limpio antes del commit documental.
+- **Commit relacionado:** Se registrará al crear el commit documental de esta etapa.
 
 ## Resumen
 
 | Decisión | Cantidad |
 |---|---|
-| Aceptadas | 3 |
-| Aceptadas con cambios | 1 (más la entrada 6 si corresponde) |
+| Aceptadas | 6 |
+| Aceptadas con cambios | 2 |
 | Rechazadas | 1 |
 
 ## Errores que atraparon las pruebas
 
-Con el código que generó Copilot, ninguna de las 6 pruebas falló: pasaron a la primera. Para comprobar que las pruebas sí detectan errores, en el commit en rojo desactivé la función `validarDisponibilidad` y fallaron las pruebas que esperan el rechazo: [escribe aquí los nombres exactos de las pruebas que fallaron al correr `npm test`]. Al restaurar la función, volvieron a pasar. Además, no fue una prueba sino mi revisión la que detectó la diferencia entre mi contrato y el código real (entrada 4) y la contraseña expuesta (entrada 5).
+Con el código que generó Copilot, las 6 pruebas iniciales pasaron a la primera. Para comprobar que sí detectan errores, en el commit en rojo desactivé la función `validarDisponibilidad` y fallaron las pruebas `rechaza la misma hora del mismo médico con el mensaje de HU-01` y `detecta el cruce cuando una cita de 30 minutos se solapa con una existente`. Al restaurar la función, volvieron a pasar. Además, no fue una prueba sino mi revisión la que detectó la diferencia entre mi contrato y el código real (entrada 4) y la contraseña expuesta (entrada 5).
 
 ## Reflexión final (5 a 8 líneas)
 
