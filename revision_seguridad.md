@@ -1,8 +1,8 @@
 # Informe de revisión de código y seguridad
 
-Proyecto: Agenda de citas para un consultorio médico  
-Estudiante: Nicole Salazar  
-Fecha: 2026-11-27  
+Proyecto: Agenda de citas para un consultorio médico
+Estudiante: Nicole Salazar
+Fecha: 2026-11-27
 Commit revisado: 98f1e7207f6644eaa77ab91bd5fb2e584202d043
 
 ## 1. Herramientas y criterios

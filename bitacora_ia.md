@@ -84,7 +84,7 @@ Asistente usado: GitHub Copilot (modo Agent y chat) para el proyecto, las prueba
 - **Decisión:** Aceptada
 - **Por qué:** La documentación conserva la semana 5, registra los cambios reales y separa hallazgos corregidos de pendientes no autorizados.
 - **Verificación:** Confirmé commits con `git log`, ejecución de tests y lint, `.env.example` sin valores reales y el estado limpio antes del commit documental.
-- **Commit relacionado:** Se registrará al crear el commit documental de esta etapa.
+- **Commit relacionado:** `00a46edf1c879348eb060bb4ad4d43324da7e92` — Agrega informe y bitácora de revisión de seguridad.
 
 ## Resumen
 
