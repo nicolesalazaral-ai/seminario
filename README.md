@@ -116,6 +116,6 @@ Los documentos verificables preparados para el informe final están en [docs/](d
 - [Guía de despliegue](docs/guia_despliegue.md)
 - [Plan de operación](docs/plan_operacion.md)
 - [Borrador de aviso de privacidad](docs/aviso_privacidad_borrador.md)
-- [Informe final](docs/informe_final.md)
+- [Informe final](docs/informe_final.pdf)
 
 El pipeline se define en [.github/workflows/ci.yml](.github/workflows/ci.yml). Su última ejecución no puede afirmarse hasta subir el repositorio y revisar GitHub Actions.

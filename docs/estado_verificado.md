@@ -84,7 +84,7 @@ Resultado real: 16 vulnerabilidades moderadas, 0 altas y 0 críticas. `@angular/
 | Entrevista/requisitos del módulo 2 | NO EXISTE como documento identificable; se crea `docs/requisitos.md` en esta sesión. |
 | Diseño | NO EXISTE como documento anterior; se crea `docs/diseno.md`. |
 | ADR | NO EXISTE como archivo anterior; se crea `docs/adr/ADR-001.md`. |
-| Revisión de código | Existe `revision_seguridad.md` en la raíz y se mantiene; la Semana 10 documenta su enlace desde `docs/informe_final.md`. |
+| Revisión de código | Existe `revision_seguridad.md` en la raíz y se mantiene; la Semana 10 documenta su enlace desde `docs/informe_final.pdf`. |
 | Plan de pruebas | NO EXISTE como documento anterior; se crea `docs/plan_pruebas.md`. |
 | Guía de despliegue | NO EXISTE como documento anterior; se crea `docs/guia_despliegue.md`. |
 | Plan de operación | NO EXISTE como documento anterior; se crea `docs/plan_operacion.md`. |
