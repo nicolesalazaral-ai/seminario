@@ -105,7 +105,7 @@ Asistente usado: GitHub Copilot (modo Agent y chat) para el proyecto, las prueba
 - **Archivos relacionados revisados:** `README.md`, `bitacora_ia.md`, `revision_seguridad.md`, los documentos de `docs/`, el historial de Git y los archivos de pruebas backend.
 - **Verificación:** Ejecuté `git log --oneline -20`, `git branch --show-current`, `npm test` y `npm run lint` en backend. Las 9 pruebas pasaron y el linter no mostró errores ni avisos. Verifiqué los casos de contraseña compartida, binding local y contraseña visible con `git show`.
 - **Nota:** La revisión final de datos personales, licencia, responsabilidad y privacidad es humana. El pipeline se deja marcado como pendiente de verificación en GitHub.
-- **Commit relacionado:** Pendiente de completar con el hash del commit que registre este archivo.
+- **Commit relacionado:** `dec4feda85c39d61253b9fa188ae82174811dd4c` — Consolida datos verificados del integrador.
 
 ## Resumen
 

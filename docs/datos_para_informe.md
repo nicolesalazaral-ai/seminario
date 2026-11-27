@@ -442,4 +442,3 @@ El esquema excede la lista mínima solicitada en duración si se usan las ocho d
 14. PENDIENTE: validar el texto final del aviso de privacidad.
 15. PENDIENTE: decidir frecuencia de respaldo y responsable operativo.
 16. Practicar la sustentación con las pruebas y comandos exactos de este documento.
-
