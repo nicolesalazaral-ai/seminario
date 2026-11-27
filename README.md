@@ -102,3 +102,20 @@ Se usó GitHub Copilot para apoyar implementación, pruebas y revisión de segur
 
 Autora: Nicole Salazar
 Licencia: [elegir licencia]
+
+## Documentación de la Semana 10
+
+Los documentos verificables preparados para el informe final están en [docs/](docs/):
+
+- [Estado verificado](docs/estado_verificado.md)
+- [Propuesta](docs/propuesta.md)
+- [Requisitos](docs/requisitos.md)
+- [Diseño](docs/diseno.md)
+- [ADR-001](docs/adr/ADR-001.md)
+- [Plan de pruebas](docs/plan_pruebas.md)
+- [Guía de despliegue](docs/guia_despliegue.md)
+- [Plan de operación](docs/plan_operacion.md)
+- [Borrador de aviso de privacidad](docs/aviso_privacidad_borrador.md)
+- [Informe final](docs/informe_final.md)
+
+El pipeline se define en [.github/workflows/ci.yml](.github/workflows/ci.yml). Su última ejecución no puede afirmarse hasta subir el repositorio y revisar GitHub Actions.
